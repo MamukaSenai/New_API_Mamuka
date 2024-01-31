@@ -25,7 +25,7 @@ public class TarefaModel implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "id_gestor", referencedColumnName = "id")
+    @JoinColumn(name = "id_responsavel", referencedColumnName = "id")
     //    private UUID id_dev ;
     private UsuarioModel dev ;
 
