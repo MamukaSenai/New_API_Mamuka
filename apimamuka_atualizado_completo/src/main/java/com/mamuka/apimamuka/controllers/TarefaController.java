@@ -46,6 +46,17 @@ public class TarefaController {
         return ResponseEntity.status(HttpStatus.OK).body(tarefaBuscada.get());
     }
 
+    @GetMapping("/projeto/{idProjeto}")
+    public ResponseEntity<List<TarefaModel>> listarTarefasProjeto(@PathVariable(value = "idProjeto") UUID idProjeto) {
+        List<TarefaModel> tarefasProjeto = tarefaRepository.findByProjetoId(idProjeto);
+
+        if (tarefasProjeto.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefasProjeto);
+    }
+
     @PostMapping
     public ResponseEntity<Object> cadastrarTarefa(@RequestBody @Valid TarefaDto tarefaDto) {
         TarefaModel tarefaModel = new TarefaModel();

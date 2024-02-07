@@ -25,6 +25,7 @@ public class TokenService {
                     .withSubject(usuario.getEmail())
                     .withClaim("perfil", usuario.getTipo_usuario().getRole())
                     .withClaim("nomeUsuario", usuario.getNome()) // para enviar um Claim, procurar no material da materia, primeiro dia sobre o assunto dia 06 do 11
+                    .withClaim("idUsuario", usuario.getId().toString())
                     .withExpiresAt(gerarValidadeToken())
                     .sign(algoritmo);
 
