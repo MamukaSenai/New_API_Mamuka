@@ -62,6 +62,24 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
     }
 
+    @PutMapping(value =  "/{idUsuario}/alterar-senha")
+    public ResponseEntity<Object> alterarSenhaUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestParam String novaSenha){
+        Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
+
+        if(usuarioBuscado.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
+        }
+
+        UsuarioModel usuario = usuarioBuscado.get();
+
+        String novaSenhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
+        usuario.setSenha(novaSenhaCriptografada);
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Senha do usuário atualizada com sucesso!");
+    }
+
     @PutMapping(value =  "/{idUsuario}" /**, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}**/)
     public ResponseEntity<Object> editarUsuario(@PathVariable(value = "idUsuario") UUID id, @ModelAttribute @Valid UsuarioDto usuarioDto){
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
