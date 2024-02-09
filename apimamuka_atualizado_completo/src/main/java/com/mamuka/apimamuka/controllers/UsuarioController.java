@@ -1,5 +1,6 @@
 package com.mamuka.apimamuka.controllers;
 
+import com.mamuka.apimamuka.dtos.SenhaDto;
 import com.mamuka.apimamuka.dtos.UsuarioDto;
 import com.mamuka.apimamuka.models.UsuarioModel;
 import com.mamuka.apimamuka.repositories.UsuarioRepository;
@@ -62,8 +63,9 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
     }
 
-    @PutMapping(value =  "/{idUsuario}/alterar-senha")
-    public ResponseEntity<Object> alterarSenhaUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestParam String novaSenha){
+    @PutMapping(value =  "/alterarsenha/{idUsuario}")
+    public ResponseEntity<Object> alterarSenhaUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody @Valid SenhaDto senhaDto){
+        System.out.println("hegdfhydsghfs");
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
         if(usuarioBuscado.isEmpty()){
@@ -72,7 +74,9 @@ public class UsuarioController {
 
         UsuarioModel usuario = usuarioBuscado.get();
 
-        String novaSenhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
+        String novaSenhaCriptografada = new BCryptPasswordEncoder().encode(senhaDto.senha());
+
+        System.out.println(novaSenhaCriptografada);
         usuario.setSenha(novaSenhaCriptografada);
 
         usuarioRepository.save(usuario);
